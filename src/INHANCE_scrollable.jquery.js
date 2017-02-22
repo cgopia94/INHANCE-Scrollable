@@ -1,7 +1,7 @@
 // JQuery plugin for making the wrapper div scrollable using mouse
 // currently only supports for either vertical or horizontal scroll not both
-// version: 0.0.4
-// date: 06/30/2016
+// version: 0.0.5
+// date: 02/22/2017
 // Author: Myeong Kim
 // Example:
 // $('#theWrapper').INHANCE_scrollable({direction: 'horizontal'});
@@ -38,17 +38,17 @@
 	    };
 
 	    console.log(scrollDir);
-	    $(this).off('mousedown.scrollable').on('mousedown.scrollable', function(event) {
+	    $(this).off('mousedown.scrollable touchstart.scrollable').on('mousedown.scrollable touchstart.scrollable', function(event) {
 	      event.stopImmediatePropagation();
-	      var mouseX = settings.direction == 'vertical' ? event.pageY : event.pageX;
+	      var mouseX = settings.direction == 'vertical' ? ((event.touches && event.touches[0].pageY) || event.pageY) : ((event.touches && event.touches[0].pageX) || event.pageX);
 	      
 	      startX = mouseX;
 	      scrollStartPos = this[scrollDir] + mouseX;
 	      isMouseDown = true;
 	    });
-	    $(this).off('mouseup.scrollable').on('mouseup.scrollable', function(event) {
+	    $(this).off('mouseup.scrollable touchend.scrollable').on('mouseup.scrollable touchend.scrollable', function(event) {
 	      event.stopImmediatePropagation();
-	      var mouseX = settings.direction == 'vertical' ? event.pageY : event.pageX;
+	      var mouseX = settings.direction == 'vertical' ? ((event.touches && event.touches[0].pageY) || event.pageY) : ((event.touches && event.touches[0].pageX) || event.pageX);
 	      isMouseDown = false;
 	      if(isScrolling && Math.abs(startX - mouseX) > THRESHOLD_PIXELS_FOR_MOVE) {
 	      	isScrolling = false;
@@ -58,19 +58,19 @@
 	      }
 	    });
 
-	    $(this).off('mousemove.scrollable').on('mousemove.scrollable', function(event) {
+	    $(this).off('mousemove.scrollable touchmove.scrollable').on('mousemove.scrollable touchmove.scrollable', function(event) {
 	    	event.preventDefault();
 	      event.stopImmediatePropagation();
 	      var mouseX;
 	      var marginStart;
 	      var marginEnd;
 	      if (settings.direction == 'vertical') {
-	      	mouseX = event.pageY;
+	      	mouseX = (event.touches && event.touches[0].pageY) || event.pageY;
 	      	marginStart = $(this).offset().top;
 	      	marginEnd = $(this).offset().top + $(this).height();
 	      }
 	      else {
-	      	mouseX = event.pageX;
+	      	mouseX = (event.touches && event.touches[0].pageX) || event.pageX;
 	      	marginStart = $(this).offset().left;
 	      	marginEnd = $(this).offset().left + $(this).width();
 	      }
@@ -79,9 +79,9 @@
 	      	this[scrollDir] = scrollStartPos - mouseX;
 	        isScrolling = true;
 
-	        $(this).on('mouseleave.scrollable', function () {
+	        $(this).on('mouseleave.scrollable touchleave.scrollable', function () {
 	        	console.log('out!!');
-	        	$(this).off('mouseleave.scrollable').trigger('mouseup.scrollable');
+	        	$(this).off('mouseleave.scrollable touchleave.scrollable').trigger('mouseup.scrollable');
 	        });
 	      }
 	      
