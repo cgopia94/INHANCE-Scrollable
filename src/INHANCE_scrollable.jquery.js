@@ -1,6 +1,6 @@
 // JQuery plugin for making the wrapper div scrollable using mouse
 // currently only supports for either vertical or horizontal scroll not both
-// version: 0.0.5
+// version: 0.0.6
 // date: 02/22/2017
 // Author: Myeong Kim
 // Example:
@@ -58,19 +58,19 @@
 	      }
 	    });
 
-	    $(this).off('mousemove.scrollable touchmove.scrollable').on('mousemove.scrollable touchmove.scrollable', function(event) {
+	    $(this).off('mousemove.scrollable').on('mousemove.scrollable', function(event) {
 	    	event.preventDefault();
 	      event.stopImmediatePropagation();
 	      var mouseX;
 	      var marginStart;
 	      var marginEnd;
 	      if (settings.direction == 'vertical') {
-	      	mouseX = (event.touches && event.touches[0].pageY) || event.pageY;
+	      	mouseX = event.pageY;
 	      	marginStart = $(this).offset().top;
 	      	marginEnd = $(this).offset().top + $(this).height();
 	      }
 	      else {
-	      	mouseX = (event.touches && event.touches[0].pageX) || event.pageX;
+	      	mouseX = event.pageX;
 	      	marginStart = $(this).offset().left;
 	      	marginEnd = $(this).offset().left + $(this).width();
 	      }
