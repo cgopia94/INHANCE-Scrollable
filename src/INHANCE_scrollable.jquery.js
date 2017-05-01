@@ -33,6 +33,7 @@
 	    var scrollDir = settings.direction == 'vertical' ? 'scrollTop' : 'scrollLeft';
 	    var capturingHandler = function (event) {
 	    	if (!isScrolling) {
+	    		event.preventDefault();
 	    		event.stopPropagation();
 	    	}
 	    };
